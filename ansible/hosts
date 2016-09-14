@@ -1,0 +1,7 @@
+[local]
+localhost ansible_connection=local
+
+[nginxserver]
+
+[appserver]
+

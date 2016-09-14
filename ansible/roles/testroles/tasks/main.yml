@@ -1,0 +1,23 @@
+- name: Install apache install Centos
+  yum: name={{ redhat_apache }} state=latest
+  notify: Restart Httpd
+  ignore_errors: yes
+- shell: service httpd status
+  register: ser_result
+  until: ser_result.stdout.find("is running") != -1
+  retries: 5
+  delay: 5
+- name: Install packages
+  yum: name={{ item }} state=latest
+  with_items:
+    - telnet
+    - lynx
+- name: verify the web service is running
+  command: service httpd status
+  register: result
+- name: log all the packages install on the system
+  command: yum list installed | grep grep 'httpd\|telnet\|lynx'
+  register: install_list
+- debug: var=install_list
+- debug: var=result
+

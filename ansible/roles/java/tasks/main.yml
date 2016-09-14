@@ -1,0 +1,14 @@
+- name: Install Java if Ubuntu
+  apt:
+    name=openjdk-7-jdk
+    state=present
+  when: "ansible_os_family == 'Debian'"
+  with_items: packages
+  tags: [java]
+
+- name: Install Java if Centos
+  yum: 
+    name=java-1.7.0-openjdk-devel
+    state=present
+  when: "ansible_os_family == 'RedHat'"
+
