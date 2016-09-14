@@ -18,7 +18,6 @@
   apt:
     name: docker-engine
     state: latest
-    force: yes
   when: "ansible_os_family == 'Debian'"
   tags: [docker]
 
