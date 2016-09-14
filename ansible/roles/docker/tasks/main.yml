@@ -26,7 +26,6 @@
   yum:
     name: docker
     state: latest
-    force: yes
   when: "ansible_os_family == 'RedHat'"
   tags: [docker]
 

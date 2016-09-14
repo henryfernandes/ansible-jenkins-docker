@@ -12,7 +12,7 @@ sudo yum install git -y
 #sudo adduser --home /home/jenkins --shell /bin/bash jenkins
 sudo groupadd -g 1000 -r jenkins
 sudo useradd -m -d /home/jenkins -s /bin/bash -u 1000 -g 1000 jenkins
-sudo echo dep123 | passwd jenkins --stdin
+sudo echo dep123 | sudo passwd jenkins --stdin
 
 #sudo mkdir /home/jenkins/.ssh
 if sudo grep -q "jenkins" /etc/sudoers
@@ -25,26 +25,26 @@ fi
 
 sudo su - jenkins  <<'EOF'
 echo "#Get godeploy git repo" #Get godeploy git repo
-git clone https://github.com/henryfernandes/godeploy.git
+git clone https://github.com/henryfernandes/ansible-jenkins-docker.git
+cd $PWD/ansible-jenkins-docker
 echo "Create SSH keys"#Create SSH keys
-cd ~/godeploy/files; rm -rf id_rsa.pub id_rsa authorized_keys
-ssh-keygen -t rsa -b 4096 -N "" -f ~/godeploy/files/id_rsa
-cp ~/godeploy/files/id_rsa.pub  ~/godeploy/files/authorized_keys -R
-cp ~/godeploy/files/id_rsa.pub  ~/godeploy/goapp/authorized_keys -R
-cp ~/godeploy/files/*  ~/godeploy/jenkins/ -R
+mkdir $PWD/files; cd $PWD/files; rm -rf id_rsa.pub id_rsa authorized_keys
+ssh-keygen -t rsa -b 4096 -N "" -f $PWD/id_rsa
+cp $PWD/id_rsa.pub  $PWD/authorized_keys -R
+
 echo "#run playbook" #run playbook
-cd ~/godeploy/playbooks/
-ansible-playbook -i hosts  -c local -s localsetup.yml
-host1=`sudo docker inspect app1 | grep IPA | grep -v Sec | awk -F"\"" '{print $4}'`;
-host2=`sudo docker inspect app2 | grep IPA | grep -v Sec | awk -F"\"" '{print $4}'`;
-sed -i "/appserver/a ${host2}" hosts
-sed -i "/appserver/a ${host1}" hosts
-sed -i "s/host1/${host1}/g" ~/godeploy/nginx/default.conf
-sed -i "s/host2/${host2}/g" ~/godeploy/nginx/default.conf
-sed -i "s/app1/${host1}/g" ~/godeploy/jenkins/config-goapp.xml
-sed -i "s/app2/${host2}/g" ~/godeploy/jenkins/config-goapp.xml
-ansible-playbook -i hosts  -c local nginxserver.yml
-ansible-playbook -i hosts  -c local jenkinsserver.yml
-nix1=`sudo docker inspect gonginx | grep IPA | grep -v Sec | awk -F"\"" '{print $4}'`;
-sed -i "/nginxserver/a ${nix1}" hosts
+cd $HOME/ansible-jenkins-docker/ansible/
+ansible-playbook -i hosts  -c local cd.yml
+#host1=`sudo docker inspect app1 | grep IPA | grep -v Sec | awk -F"\"" '{print $4}'`;
+#host2=`sudo docker inspect app2 | grep IPA | grep -v Sec | awk -F"\"" '{print $4}'`;
+#sed -i "/appserver/a ${host2}" hosts
+#sed -i "/appserver/a ${host1}" hosts
+#sed -i "s/host1/${host1}/g" ~/godeploy/nginx/default.conf
+#sed -i "s/host2/${host2}/g" ~/godeploy/nginx/default.conf
+#sed -i "s/app1/${host1}/g" ~/godeploy/jenkins/config-goapp.xml
+#sed -i "s/app2/${host2}/g" ~/godeploy/jenkins/config-goapp.xml
+#ansible-playbook -i hosts  -c local nginxserver.yml
+#ansible-playbook -i hosts  -c local jenkinsserver.yml
+#nix1=`sudo docker inspect gonginx | grep IPA | grep -v Sec | awk -F"\"" '{print $4}'`;
+#sed -i "/nginxserver/a ${nix1}" hosts
 EOF
