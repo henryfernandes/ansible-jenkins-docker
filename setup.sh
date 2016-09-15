@@ -13,6 +13,7 @@ if [ $(cat /etc/issue | grep Debian) ];
 
 	sudo yum install ansible -y
 	sudo yum install git -y
+	sudo yum remove epel-release -y
 fi
 
 
