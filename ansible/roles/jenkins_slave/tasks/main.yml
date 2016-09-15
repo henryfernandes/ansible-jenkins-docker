@@ -1,0 +1,38 @@
+- name: Install wget package (Debian based)
+  action: apt pkg='wget' state=installed
+  when: "ansible_os_family == 'Debian'"
+
+- name: Install wget package (RedHat based)
+  action: yum name='wget' state=installed
+  when: "ansible_os_family == 'RedHat'"
+
+- name: Install Java if Ubuntu
+  apt:
+    name=openjdk-7-jdk
+    state=present
+  when: "ansible_os_family == 'Debian'"
+  with_items: packages
+  tags: [java]
+
+- name: Install Java if Centos
+  yum: 
+    name=java-1.7.0-openjdk-devel
+    state=present
+  when: "ansible_os_family == 'RedHat'"
+
+- name: Set java link
+  action: command update-alternatives --install /usr/bin/java java ${jvm_folder}/jdk1.7.0/bin/java 1
+
+- name: Set jar link
+  action: command update-alternatives --install /usr/bin/jar jar ${jvm_folder}/jdk1.7.0/bin/jar 1
+
+- name: Create jenkins user
+  user: name=jenkins comment="Jenkins slave user" home=${jenkins_home} shell=/bin/bash
+
+- name: Create Jenkins slave directory
+  file: path=${jenkins_home}/jenkins-slave state=directory owner=jenkins
+
+- name: Download Jenkins Swarm Client
+  get_url: dest=${jenkins_home}/swarm-client-1.8-jar-with-dependencies.jar url=https://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/2.2/swarm-client-2.2-jar-with-dependencies.jar owner=jenkins
+
+

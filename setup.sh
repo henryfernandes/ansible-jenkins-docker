@@ -1,18 +1,33 @@
 #!/bin/bash
-sudo yum remove epel-release -y
-rm -rf epel-releas*
-wget http://download.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
+if [ $(cat /etc/issue | grep Debian) ]; 
+  then
+	sudo apt-get update
+	sudo apt-get install git -y  && sudo apt-get install ansible -y
+  else
+	sudo yum remove epel-release -y
+	rm -rf epel-releas*
+	wget http://download.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
 
-sudo rpm -ivh epel-release-6-8.noarch.rpm
-rm -rf epel-releas*
+	sudo rpm -ivh epel-release-6-8.noarch.rpm
+	rm -rf epel-releas*
 
-sudo yum install ansible -y
-sudo yum install git -y
+	sudo yum install ansible -y
+	sudo yum install git -y
+fi
+
+
+sudo curl -L https://github.com/docker/compose/releases/download/1.5.2/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose 
+sudo chmod +x /usr/local/bin/docker-compose
+
+sudo curl -L https://github.com/docker/machine/releases/download/v0.5.3/docker-machine_linux-amd64 >/usr/local/bin/docker-machine && \
+sudo chmod +x /usr/local/bin/docker-machine
 
 #sudo adduser --home /home/jenkins --shell /bin/bash jenkins
 sudo groupadd -g 1000 -r jenkins
 sudo useradd -m -d /home/jenkins -s /bin/bash -u 1000 -g 1000 jenkins
-sudo echo dep123 | sudo passwd jenkins --stdin
+sudo echo jenkins | sudo passwd jenkins --stdin
+
+sudo -aG docker jenkins
 
 #sudo mkdir /home/jenkins/.ssh
 if sudo grep -q "jenkins" /etc/sudoers
@@ -35,6 +50,7 @@ cp $PWD/id_rsa.pub  $PWD/authorized_keys -R
 echo "#run playbook" #run playbook
 cd $HOME/ansible-jenkins-docker/ansible/
 ansible-playbook -i hosts  -c local cd.yml
+
 #host1=`sudo docker inspect app1 | grep IPA | grep -v Sec | awk -F"\"" '{print $4}'`;
 #host2=`sudo docker inspect app2 | grep IPA | grep -v Sec | awk -F"\"" '{print $4}'`;
 #sed -i "/appserver/a ${host2}" hosts
@@ -47,4 +63,5 @@ ansible-playbook -i hosts  -c local cd.yml
 #ansible-playbook -i hosts  -c local jenkinsserver.yml
 #nix1=`sudo docker inspect gonginx | grep IPA | grep -v Sec | awk -F"\"" '{print $4}'`;
 #sed -i "/nginxserver/a ${nix1}" hosts
+
 EOF

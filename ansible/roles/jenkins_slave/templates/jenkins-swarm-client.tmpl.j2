@@ -1,0 +1,1 @@
+java -jar {{JENKINS_HOME}}/swarm-client-2.2-jar-with-dependencies.jar -name {{jenkins_slave_name}} -password {{jenkins_password}} -username jenkins -fsroot {{JENKINS_HOME}}/jenkins-slave -master http://jenmaster:8080 -disableSslVerification &> {{JENKINS_HOME}}/swarm-client.log &

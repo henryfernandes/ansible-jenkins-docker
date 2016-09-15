@@ -10,7 +10,7 @@
   yum_repository:
     name: epel
     description: EPEL YUM repo
-    baseurl: http://download.fedoraproject.org/pub/epel/$releasever/$basearch/
+    baseurl: https://yum.dockerproject.org/repo/main/centos/$releasever/
   when: "ansible_os_family == 'RedHat'"
   tags: [docker]
 
@@ -23,7 +23,7 @@
 
 - name: Docker is present
   yum:
-    name: docker
+    name: docker-engine
     state: latest
   when: "ansible_os_family == 'RedHat'"
   tags: [docker]
@@ -41,7 +41,7 @@
 - name: Debian docker-py is present
   pip:
     name: docker-py
-    version: 1.6.0
+    version: 1.2.3
     state: present
   tags: [docker]
 
@@ -56,5 +56,5 @@
   service:
     name: docker
     state: restarted
-  when: copy_result|changed
+#  when: copy_result|changed
   tags: [docker]
