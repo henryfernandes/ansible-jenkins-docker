@@ -42,7 +42,10 @@
   tags: [docker]
 
 - name: Python-pip is present
-  yum: name=python-pip state=present
+  yum: name={{ item }} state=present
+  with_items:
+    libselinux-python
+    python-pip
   when: "ansible_os_family == 'RedHat'"
   tags: [docker]
 
