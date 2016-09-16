@@ -13,6 +13,7 @@ if [ $(cat /etc/issue | grep Debian) ];
 
 	sudo yum install ansible -y
 	sudo yum install git -y
+	sudo yum remove epel-release -y
 fi
 
 curl -L https://github.com/docker/machine/releases/download/v0.7.0/docker-machine-`uname -s`-`uname -m` > docker-machine && \
