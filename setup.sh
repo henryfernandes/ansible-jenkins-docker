@@ -1,38 +1,4 @@
 #!/bin/bash
-if [ $(cat /etc/issue | grep Debian) ]; 
-  then
-	sudo apt-get update
-	sudo apt-get install git -y  && sudo apt-get install ansible -y
-  else
-	sudo yum remove epel-release -y
-	rm -rf epel-releas*
-	wget http://download.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
-
-	sudo rpm -ivh epel-release-6-8.noarch.rpm
-	rm -rf epel-releas*
-
-	sudo yum install ansible -y
-	sudo yum install git -y
-	sudo yum remove epel-release -y
-fi
-
-
-if [ $(ls /usr/local/bin/docker-machine ) ];
-  then
-	echo "/usr/local/bin/docker-machine file already exits"
-  else
-	curl -L https://github.com/docker/machine/releases/download/v0.7.0/docker-machine-`uname -s`-`uname -m` > docker-machine && \
-	sudo cp docker-machine /usr/local/bin/docker-machine && sudo chmod +x /usr/local/bin/docker-machine
-fi
-if [ $(ls /usr/local/bin/docker-compose ) ];
-  then
-        echo "/usr/local/bin/docker-compose file already exits"
-  else
-	sudo curl -L https://github.com/docker/compose/releases/download/1.5.2/docker-compose-`uname -s`-`uname -m` > docker-compose && \
-	sudo cp docker-compose /usr/local/bin/docker-compose && sudo chmod +x /usr/local/bin/docker-compose
-fi
-
-
 #sudo adduser --home /home/deployer --shell /bin/bash deployer
 #sudo groupadd -g 1000 -r deployer
 sudo useradd -m -d /home/deployer -s /bin/bash deployer
@@ -52,6 +18,43 @@ fi
 sudo su - deployer  <<'EOF'
 echo "Emtpy the folder"
 rm -rf *
+
+
+if [ $(cat /etc/issue | grep Debian) ]; 
+  then
+	sudo apt-get update
+	sudo apt-get install git -y  && sudo apt-get install ansible -y
+  else
+	sudo yum update -y
+	sudo yum remove epel-release -y
+	rm -rf epel-releas*
+	wget http://download.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
+
+	sudo rpm -ivh epel-release-6-8.noarch.rpm
+	rm -rf epel-releas*
+#	curl -fsSL https://get.docker.com/ | sudo sh
+
+	sudo yum install ansible -y
+	sudo yum install git -y
+fi
+
+
+if [ $(ls /usr/local/bin/docker-machine ) ];
+  then
+	echo "/usr/local/bin/docker-machine file already exits"
+  else
+	curl -L https://github.com/docker/machine/releases/download/v0.7.0/docker-machine-`uname -s`-`uname -m` > docker-machine && \
+	sudo cp docker-machine /usr/local/bin/docker-machine && sudo chmod +x /usr/local/bin/docker-machine
+fi
+if [ $(ls /usr/local/bin/docker-compose ) ];
+  then
+        echo "/usr/local/bin/docker-compose file already exits"
+  else
+	sudo curl -L https://github.com/docker/compose/releases/download/1.5.2/docker-compose-`uname -s`-`uname -m` > docker-compose && \
+	sudo cp docker-compose /usr/local/bin/docker-compose && sudo chmod +x /usr/local/bin/docker-compose
+fi
+
+
 
 echo "#Get godeploy git repo" #Get godeploy git repo
 git clone https://github.com/henryfernandes/ansible-jenkins-docker.git
