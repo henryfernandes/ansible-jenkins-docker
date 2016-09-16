@@ -16,30 +16,40 @@ if [ $(cat /etc/issue | grep Debian) ];
 	sudo yum remove epel-release -y
 fi
 
-curl -L https://github.com/docker/machine/releases/download/v0.7.0/docker-machine-`uname -s`-`uname -m` > docker-machine && \
-sudo cp docker-machine /usr/local/bin/docker-machine && sudo chmod +x /usr/local/bin/docker-machine
 
-sudo curl -L https://github.com/docker/compose/releases/download/1.5.2/docker-compose-`uname -s`-`uname -m` > docker-compose && \
-sudo cp docker-compose /usr/local/bin/docker-compose && sudo chmod +x /usr/local/bin/docker-compose
+if [ $(ls /usr/local/bin/docker-machine ) ];
+  then
+	echo "/usr/local/bin/docker-machine file already exits"
+  else
+	curl -L https://github.com/docker/machine/releases/download/v0.7.0/docker-machine-`uname -s`-`uname -m` > docker-machine && \
+	sudo cp docker-machine /usr/local/bin/docker-machine && sudo chmod +x /usr/local/bin/docker-machine
+fi
+if [ $(ls /usr/local/bin/docker-compose ) ];
+  then
+        echo "/usr/local/bin/docker-compose file already exits"
+  else
+	sudo curl -L https://github.com/docker/compose/releases/download/1.5.2/docker-compose-`uname -s`-`uname -m` > docker-compose && \
+	sudo cp docker-compose /usr/local/bin/docker-compose && sudo chmod +x /usr/local/bin/docker-compose
+fi
 
 
-#sudo adduser --home /home/jenkins --shell /bin/bash jenkins
-sudo groupadd -g 1000 -r jenkins
-sudo useradd -m -d /home/jenkins -s /bin/bash -u 1000 -g 1000 jenkins
-sudo echo jenkins | sudo passwd jenkins --stdin
+#sudo adduser --home /home/deployer --shell /bin/bash deployer
+#sudo groupadd -g 1000 -r deployer
+sudo useradd -m -d /home/deployer -s /bin/bash -u 1000 -g 1000 deployer
+sudo echo deployer | sudo passwd deployer --stdin
 
-sudo usermod -aG docker jenkins
+sudo usermod -aG docker deployer
 
-#sudo mkdir /home/jenkins/.ssh
-if sudo grep -q "jenkins" /etc/sudoers
+#sudo mkdir /home/deployer/.ssh
+if sudo grep -q "deployer" /etc/sudoers
    then
      echo "already added to sudoers"
 else 
-      sudo sed -i '/NOPASSWD/ a jenkins	ALL=(ALL)      NOPASSWD: ALL' /etc/sudoers
+      sudo sed -i '/NOPASSWD/ a deployer	ALL=(ALL)      NOPASSWD: ALL' /etc/sudoers
      echo "not exist"
 fi
 
-sudo su - jenkins  <<'EOF'
+sudo su - deployer  <<'EOF'
 echo "Emtpy the folder"
 rm -rf *
 
@@ -64,10 +74,10 @@ ansible-playbook -i hosts  -c local cd.yml
 #sed -i "/appserver/a ${host1}" hosts
 #sed -i "s/host1/${host1}/g" ~/godeploy/nginx/default.conf
 #sed -i "s/host2/${host2}/g" ~/godeploy/nginx/default.conf
-#sed -i "s/app1/${host1}/g" ~/godeploy/jenkins/config-goapp.xml
-#sed -i "s/app2/${host2}/g" ~/godeploy/jenkins/config-goapp.xml
+#sed -i "s/app1/${host1}/g" ~/godeploy/deployer/config-goapp.xml
+#sed -i "s/app2/${host2}/g" ~/godeploy/deployer/config-goapp.xml
 #ansible-playbook -i hosts  -c local nginxserver.yml
-#ansible-playbook -i hosts  -c local jenkinsserver.yml
+#ansible-playbook -i hosts  -c local deployerserver.yml
 #nix1=`sudo docker inspect gonginx | grep IPA | grep -v Sec | awk -F"\"" '{print $4}'`;
 #sed -i "/nginxserver/a ${nix1}" hosts
 
