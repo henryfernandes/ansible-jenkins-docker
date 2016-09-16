@@ -53,8 +53,9 @@
   tags: [docker]
 
 - name: Docker service is restarted
-  service:
-    name: docker
-    state: restarted
+  shell: sudo docker -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock -d &
+#  service:
+#    name: docker
+#    state: restarted
 #  when: copy_result|changed
   tags: [docker]
