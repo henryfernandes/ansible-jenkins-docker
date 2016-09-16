@@ -10,7 +10,7 @@
   yum_repository:
     name: epel
     description: EPEL YUM repo
-    baseurl: baseurl: http://download.fedoraproject.org/pub/epel/$releasever/$basearch/
+    baseurl: http://download.fedoraproject.org/pub/epel/$releasever/$basearch/
   when: "ansible_os_family == 'RedHat'"
   tags: [docker]
 
