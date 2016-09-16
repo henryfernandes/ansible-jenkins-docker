@@ -60,21 +60,27 @@
   copy:
     src: docker
     dest: /etc/default/docker
+  when: "ansible_os_family == 'Debian'"
   register: copy_result
   tags: [docker]
 
-- name: Docker service is restarted centos
-  shell: sudo docker -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock -d &
-  when: "ansible_os_family == 'RedHat'"
-#  service:
-#    name: docker
-#    state: restarted
-#  when: copy_result|changed
-  tags: [docker]
+#- name: Docker service is restarted centos
+##  shell: sudo docker -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock -d &
+##  when: "ansible_os_family == 'RedHat'"
+##  service:
+##    name: docker
+##    state: restarted
+##  when: copy_result|changed
+##  tags: [docker]
 - name: Docker service is restarted ubuntu
-# shell: sudo docker -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock -d &
   service:
     name: docker
     state: restarted
   when: "ansible_os_family == 'Debian'"
+  tags: [docker]
+
+- name: Docker service is restarted ubuntu
+  systemd:
+    name: docker
+    enabled: yes
   tags: [docker]
