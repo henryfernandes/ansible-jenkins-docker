@@ -14,7 +14,7 @@
   when: "ansible_os_family == 'RedHat'"
   tags: [docker]
 
-- name: Docker is present
+- name: Docker is present Debian
   apt:
     name: docker-engine
     state: latest
@@ -22,14 +22,14 @@
   tags: [docker]
 
 
-- name: Docker is present
+- name: Docker is present RedHat
   yum:
     name: docker-io
     state: latest
-  when: "ansible_distribution == 'RedHat'"
+  when: "ansible_os_family == 'RedHat'"
   tags: [docker]
 
-- name: Docker is present
+- name: Docker is present Amazon
   yum:
     name: docker
     state: latest
