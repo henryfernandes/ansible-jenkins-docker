@@ -35,7 +35,7 @@ fi
 
 #sudo adduser --home /home/deployer --shell /bin/bash deployer
 #sudo groupadd -g 1000 -r deployer
-sudo useradd -m -d /home/deployer -s /bin/bash -u 1000 -g 1000 deployer
+sudo useradd -m -d /home/deployer -s /bin/bash deployer
 sudo echo deployer | sudo passwd deployer --stdin
 
 sudo usermod -aG docker deployer
