@@ -44,7 +44,6 @@
 - name: Python-pip is present
   yum: name={{ item }} state=present
   with_items:
-    libselinux-python
     python-pip
   when: "ansible_os_family == 'RedHat'"
   tags: [docker]
@@ -56,20 +55,13 @@
     state: present
   tags: [docker]
 
-#- name: Files are present
-#  copy:
-#    src: docker
-#    dest: /etc/default/docker
-#  tags: [docker]
+- name: Files are present
+  copy:
+    src: docker
+    dest: /etc/default/docker
+  tags: [docker]
 
-#- name: Docker service is restarted centos
-##  shell: sudo docker -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock -d &
-##  when: "ansible_os_family == 'RedHat'"
-##  service:
-##    name: docker
-##    state: restarted
-##  when: copy_result|changed
-##  tags: [docker]
+  tags: [docker]
 - name: Docker service is restarted ubuntu
   service:
     name: docker
