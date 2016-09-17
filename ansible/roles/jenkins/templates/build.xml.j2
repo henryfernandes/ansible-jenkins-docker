@@ -5,14 +5,14 @@
   <keepDependencies>false</keepDependencies>
   <properties>
     <com.coravy.hudson.plugins.github.GithubProjectProperty plugin="github@1.10">
-      <projectUrl>https://github.com/vfarcic/{{ item }}/</projectUrl>
+      <projectUrl>https://github.com/henryfernandes/goapp.git/</projectUrl>
     </com.coravy.hudson.plugins.github.GithubProjectProperty>
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@2.3.4">
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
-        <url>https://github.com/vfarcic/{{ item }}</url>
+        <url>https://github.com/henryfernandes/goapp.git</url>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>
@@ -39,26 +39,18 @@
   <builders>
     <hudson.tasks.Shell>
       <command>
-sudo docker build -t 192.168.50.91:5000/{{ item }}-tests docker/tests/
-sudo docker push 192.168.50.91:5000/{{ item }}-tests
+sudo docker build -t 127.0.0.1:5000/goapp-build build/.
+sudo docker push 127.0.0.1:5000/goapp-build
 sudo docker run -t --rm \
-  -v $PWD:/source \
-  -v /data/.ivy2:/root/.ivy2/cache \
-  192.168.50.91:5000/{{ item }}-tests
-sudo docker build -t 192.168.50.91:5000/{{ item }} .
-sudo docker push 192.168.50.91:5000/{{ item }}</command>
+  -v code/:/go/src/helloapp \
+  -v deploy/:/tmp/deploy \
+  127.0.0.1:5000/goapp-build
+sudo docker build -t 127.0.0.1:5000/goapp-deploy deploy/.
+sudo docker push 127.0.0.1:5000/goapp-deploy
+sudo docker run -itd -v deploy/helloapp:/go/bin/helloapp --name app1 127.0.0.1:5000/goapp-deploy
+sudo docker run -itd -v deploy/helloapp:/go/bin/helloapp --name app2 127.0.0.1:5000/goapp-deploy
+</command>
     </hudson.tasks.Shell>
   </builders>
-  <publishers>
-    <hudson.tasks.BuildTrigger>
-      <childProjects>{{ item }}-deployment</childProjects>
-      <threshold>
-        <name>SUCCESS</name>
-        <ordinal>0</ordinal>
-        <color>BLUE</color>
-        <completeBuild>true</completeBuild>
-      </threshold>
-    </hudson.tasks.BuildTrigger>
-  </publishers>
   <buildWrappers/>
 </project>
