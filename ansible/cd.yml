@@ -1,6 +1,6 @@
 - hosts: localhost
-  remote_user: henry
-  sudo: yes
+  remote_user: $user
+  become: yes
   roles:
     - java
     - docker

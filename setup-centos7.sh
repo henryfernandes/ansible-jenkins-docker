@@ -63,7 +63,7 @@ cp $PWD/id_rsa.pub  $PWD/authorized_keys -R
 
 echo "#run playbook" #run playbook
 cd $HOME/ansible-jenkins-docker/ansible/
-ansible-playbook -i hosts  -c local cd.yml
+ansible-playbook -i hosts --extra-vars "user=$USER" -c local cd.yml
 
 
 #host1=`sudo docker inspect app1 | grep IPA | grep -v Sec | awk -F"\"" '{print $4}'`;
