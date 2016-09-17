@@ -44,24 +44,24 @@
   with_items: jobs
   tags: [jenkins]
 
-- name: Deployment job directories are present
-  file:
-    path='{{ jenkins_directory }}/jobs/{{ item }}-deployment'
-    state=directory
-    mode=0777
-    owner=jenkins
-  with_items: jobs
-  tags: [jenkins]
-
-- name: Deployment jobs are present
-  template:
-    src=deployment.xml.j2
-    dest='{{ jenkins_directory }}/jobs/{{ item }}-deployment/config.xml'
-    backup=yes
-    mode=0777
-    owner=jenkins
-  with_items: jobs
-  tags: [jenkins]
+#- name: Deployment job directories are present
+#  file:
+#    path='{{ jenkins_directory }}/jobs/{{ item }}-deployment'
+#    state=directory
+#    mode=0777
+#    owner=jenkins
+#  with_items: jobs
+#  tags: [jenkins]
+#
+#- name: Deployment jobs are present
+#  template:
+#    src=deployment.xml.j2
+#    dest='{{ jenkins_directory }}/jobs/{{ item }}-deployment/config.xml'
+#    backup=yes
+#    mode=0777
+#    owner=jenkins
+#  with_items: jobs
+#  tags: [jenkins]
 
 - name: Container is running
   docker:
