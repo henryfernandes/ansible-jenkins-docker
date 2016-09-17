@@ -25,7 +25,6 @@ fi
 
 sudo su - $na1  <<'EOF'
 echo "Emtpy the folder"
-rm -rf *
 sudo yum update -y
 sudo yum remove epel-release -y
 rm -rf epel-releas*
