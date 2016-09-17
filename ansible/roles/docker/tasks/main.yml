@@ -60,7 +60,6 @@
   copy:
     src: docker
     dest: /etc/default/docker
-  when: "ansible_os_family == 'Debian'"
   register: copy_result
   tags: [docker]
 
@@ -76,13 +75,5 @@
   service:
     name: docker
     state: restarted
-  when: "ansible_os_family == 'Debian'"
   tags: [docker]
 
-- name: Docker service is restarted Redhat
-  systemd:
-    name: docker
-    state: started
-    enabled: yes
-  when: "ansible_os_family == 'RedHat'"
-  tags: [docker]

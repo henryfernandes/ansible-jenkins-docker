@@ -11,7 +11,7 @@ if [ $( grep 1000 /etc/passwd ) ];
         useradd -m -d /home/jenkins -u 1000 -s /bin/bash jenkins
         echo jenkins | passwd jenkins --stdin
         usermod -aG docker jenkins
-
+fi
 
 #sudo useradd -m -d /home/deployer -s /bin/bash deployer
 #sudo echo deployer | sudo passwd deployer --stdin
