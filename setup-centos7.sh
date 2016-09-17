@@ -1,21 +1,35 @@
 #!/bin/bash
-#sudo adduser --home /home/deployer --shell /bin/bash deployer
-#sudo groupadd -g 1000 -r deployer
-sudo useradd -m -d /home/deployer -s /bin/bash deployer
-sudo echo deployer | sudo passwd deployer --stdin
+sudo su - <<'EOF'
 
-sudo usermod -aG docker deployer
+if [ $( grep 1000 /etc/passwd ) ];
+  then
+        na1=`grep 1000 /etc/passwd | awk -F: '{print $1}'`
+        na2=`grep 1000 /etc/passwd | awk -F: '{print $6}'`
+        sed -i s/1000/501/g /etc/passwd
+        chown $na1 $na2 -R
+
+        useradd -m -d /home/jenkins -u 1000 -s /bin/bash jenkins
+        echo jenkins | passwd jenkins --stdin
+        usermod -aG docker jenkins
+
+
+#sudo useradd -m -d /home/deployer -s /bin/bash deployer
+#sudo echo deployer | sudo passwd deployer --stdin
+
+#sudo usermod -aG docker deployer
 
 #sudo mkdir /home/deployer/.ssh
-if sudo grep -q "deployer" /etc/sudoers
+if sudo grep -q "jenkins" /etc/sudoers
    then
      echo "already added to sudoers"
 else
-      sudo sed -i '/NOPASSWD/ a deployer        ALL=(ALL)      NOPASSWD: ALL' /etc/sudoers
+      sudo sed -i '/NOPASSWD/ a jenkins         ALL=(ALL)      NOPASSWD: ALL' /etc/sudoers
      echo "not exist"
 fi
+EOF
 
-sudo su - deployer  <<'EOF'
+
+sudo su - jenkins  <<'EOF'
 echo "Emtpy the folder"
 rm -rf *
 sudo yum update -y
