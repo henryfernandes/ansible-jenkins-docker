@@ -56,11 +56,11 @@
     state: present
   tags: [docker]
 
-- name: Files are present
-  copy:
-    src: docker
-    dest: /etc/default/docker
-  tags: [docker]
+#- name: Files are present
+#  copy:
+#    src: docker
+#    dest: /etc/default/docker
+#  tags: [docker]
 
 #- name: Docker service is restarted centos
 ##  shell: sudo docker -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock -d &
