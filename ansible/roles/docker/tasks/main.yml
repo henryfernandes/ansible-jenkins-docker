@@ -60,7 +60,6 @@
   copy:
     src: docker
     dest: /etc/default/docker
-  register: copy_result
   tags: [docker]
 
 #- name: Docker service is restarted centos
