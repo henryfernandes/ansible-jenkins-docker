@@ -56,6 +56,7 @@ echo "Create SSH keys"#Create SSH keys
 #mkdir $PWD/files; cd $PWD/files; rm -rf id_rsa.pub id_rsa authorized_keys
 if [ $( ls .ssh/id_rsa ) ];
  then
+   echo "Keys already created"
    cp .ssh/id_rsa.pub  .ssh/authorized_keys -R
  else
    ssh-keygen -t rsa -b 4096 -N "" -f .ssh/id_rsa
