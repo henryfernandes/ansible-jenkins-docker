@@ -65,6 +65,7 @@ fi
 
 echo "#run playbook" #run playbook
 cd ansible-jenkins-docker/ansible/
+grp=`grep 1000 /etc/group | awk -F: '{print $1}'`
 ansible-playbook -i hosts --extra-vars "user=$USER , grp=$grp" -c local cd.yml
 
 
