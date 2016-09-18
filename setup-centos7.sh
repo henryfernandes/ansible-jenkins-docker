@@ -23,9 +23,6 @@ else
      echo "not exist"
 fi
 
-mkdir /data/jenkins
-chown $na1 -R /data
-
 sudo su - $na1  <<'EOF'
 
 sudo yum update -y
