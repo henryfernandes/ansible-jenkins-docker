@@ -54,7 +54,7 @@ git clone https://github.com/henryfernandes/ansible-jenkins-docker.git
 
 echo "Create SSH keys"#Create SSH keys
 #mkdir $PWD/files; cd $PWD/files; rm -rf id_rsa.pub id_rsa authorized_keys
-if [ $(ls .ssh/id_rsa ) ];
+if [ $( ls .ssh/id_rsa ) ];
  then
    cp .ssh/id_rsa.pub  .ssh/authorized_keys -R
  else
