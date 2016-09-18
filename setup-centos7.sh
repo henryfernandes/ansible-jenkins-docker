@@ -65,7 +65,7 @@ fi
 
 echo "#run playbook" #run playbook
 cd ansible-jenkins-docker/ansible/
-ansible-playbook -i hosts --extra-vars "user=$USER,grp=$grp" -c local cd.yml
+ansible-playbook -i hosts --extra-vars "user=$USER , grp=$grp" -c local cd.yml
 
 
 EOF

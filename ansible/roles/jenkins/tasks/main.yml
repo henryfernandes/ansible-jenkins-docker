@@ -1,7 +1,3 @@
-- name: capture output of grep command
-  shell: "grep 1000 /etc/group | awk -F: '{print \$1}'"
-  register: grp
-
 - name: Directories are present
   file:
     path="{{ item }}"
