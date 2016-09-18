@@ -60,7 +60,7 @@ if [ $( ls .ssh/id_rsa ) ];
    cp .ssh/id_rsa.pub  .ssh/authorized_keys -R
  else
    ssh-keygen -t rsa -b 4096 -N "" -f .ssh/id_rsa
-   cp .ssh/id_rsa.pub  .ssh/authorized_keys -R
+   cat .ssh/id_rsa.pub >> .ssh/authorized_keys 
 fi
 
 echo "#run playbook" #run playbook
