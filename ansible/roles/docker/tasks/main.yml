@@ -7,11 +7,9 @@
   tags: [docker]
 
 - name: Add repository
-  yum_repository:
-    name: epel
-    description: EPEL YUM repo
-    baseurl: http://download.fedoraproject.org/pub/epel/$releasever/$basearch/
-  when: "ansible_os_family == 'RedHat'"
+  copy:
+    src: docker.repo
+    dest: /etc/yum.repos.d/docker.repo
   tags: [docker]
 
 - name: Docker is present Debian
@@ -23,7 +21,7 @@
 
 - name: Docker is present RedHat
   yum:
-    name: docker-io
+    name: docker-engine
     state: latest
   when: "ansible_os_family == 'RedHat'"
   tags: [docker]
