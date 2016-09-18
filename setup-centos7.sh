@@ -1,6 +1,16 @@
 #!/bin/bash
 sudo setenforce 0
 
+echo "Checking if Group exists"
+if [ $( grep 1000 /etc/group ) ];
+  then
+	grp=`grep 1000 /etc/group | awk -F: '{print $1}'`
+	echo "Group $grp alredy exits with uid 1000"
+  else
+	sudo groupadd -g 1000 jenkins
+fi
+
+echo "Checking if User exists"
 if [ $( grep 1000 /etc/passwd ) ];
   then
 	echo "user alredy exits with uid 1000"
@@ -13,8 +23,7 @@ if [ $( grep 1000 /etc/passwd ) ];
 	na1=jenkins
 fi
 
-
-sudo usermod -aG docker na1
+sudo usermod -aG $grp $na1
 
 #sudo mkdir /home/deployer/.ssh
 if sudo grep -q "$na1" /etc/sudoers
@@ -55,7 +64,7 @@ fi
 
 echo "#run playbook" #run playbook
 cd ansible-jenkins-docker/ansible/
-ansible-playbook -i hosts --extra-vars "user=$USER" -c local cd.yml
+ansible-playbook -i hosts --extra-vars "user=$USER,grp=$grp" -c local cd.yml
 
 
 EOF

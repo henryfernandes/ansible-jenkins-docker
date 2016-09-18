@@ -49,6 +49,13 @@ sudo docker build -t 127.0.0.1:5000/goapp-deploy deploy/.
 sudo docker push 127.0.0.1:5000/goapp-deploy
 sudo docker run -itd -v deploy/helloapp:/go/bin/helloapp --name app1 127.0.0.1:5000/goapp-deploy
 sudo docker run -itd -v deploy/helloapp:/go/bin/helloapp --name app2 127.0.0.1:5000/goapp-deploy
+
+sudo fixnginx.sh
+
+sudo docker build -t 127.0.0.1:5000/nginx-build nginx/.
+sudo docker push 127.0.0.1:5000/nginx-build
+sudo docker run -itd --name gonginx -p 80:80 127.0.0.1:5000/nginx-build /bin/bash
+
 </command>
     </hudson.tasks.Shell>
   </builders>

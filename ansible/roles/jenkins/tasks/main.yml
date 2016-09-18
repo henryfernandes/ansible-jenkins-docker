@@ -3,6 +3,7 @@
     path="{{ item }}"
     state=directory
     owner='{{ user }}'
+    group='{{ grp }}'
     mode=0777
   with_items: directories
   tags: [jenkins]
@@ -13,6 +14,7 @@
     dest='{{ jenkins_directory }}/{{ item }}'
     mode=0777
     owner='{{ user }}'
+    group='{{ grp }}'
   with_items: configs
   tags: [jenkins]
 
@@ -22,6 +24,7 @@
     dest='{{ jenkins_directory }}/plugins/{{ item }}'
     mode=0777
     owner='{{ user }}'
+    group='{{ grp }}'
   with_items: plugins
   tags: [jenkins]
 
@@ -31,6 +34,7 @@
     state=directory
     mode=0777
     owner='{{ user }}'
+    group='{{ grp }}'
   with_items: jobs
   tags: [jenkins]
 
@@ -40,6 +44,7 @@
     dest='{{ jenkins_directory }}/jobs/{{ item }}/config.xml'
     mode=0777
     owner='{{ user }}'
+    group='{{ grp }}'
     backup=yes
   with_items: jobs
   tags: [jenkins]
