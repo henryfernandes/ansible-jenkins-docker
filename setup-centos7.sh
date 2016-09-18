@@ -1,4 +1,6 @@
 #!/bin/bash
+sudo setenforce 0
+
 if [ $( grep 1000 /etc/passwd ) ];
   then
 	echo "user alredy exits with uid 1000"

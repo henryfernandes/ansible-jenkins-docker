@@ -1,0 +1,14 @@
+--- # Seting up local server
+- hosts: local
+  user: deployer
+  connection: local
+  become: yes
+  gather_facts: no
+  pre_tasks:
+  - name: Start time
+    raw: date > $HOME/time.log
+  roles:
+  - nginxserver
+  post_tasks:
+  - name: End Time
+    raw: date >> $HOME/time.log    

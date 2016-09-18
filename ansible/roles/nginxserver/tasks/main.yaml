@@ -1,0 +1,6 @@
+- name: ensure docker is running (and enable it at boot)
+  service: name=docker state=started enabled=yes
+- name: Build image and with buildargs
+  shell: cd /home/deployer/godeploy/nginx && docker build -t ginix .
+- name: Deploy 1st Container for Nginix
+  shell: docker run -itd --name gonginx -p 80:80 ginix /bin/bash
