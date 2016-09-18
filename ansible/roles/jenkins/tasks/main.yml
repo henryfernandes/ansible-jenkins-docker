@@ -2,7 +2,7 @@
   file:
     path="{{ item }}"
     state=directory
-    owner=$user
+    become_user="{{ $user }}"
     mode=0777
   with_items: directories
   tags: [jenkins]
@@ -12,7 +12,7 @@
     src='{{ item }}'
     dest='{{ jenkins_directory }}/{{ item }}'
     mode=0777
-    owner=$user
+    become_user="{{ $user }}"
   with_items: configs
   tags: [jenkins]
 
@@ -21,7 +21,7 @@
     src='{{ item }}'
     dest='{{ jenkins_directory }}/plugins/{{ item }}'
     mode=0777
-    owner=$user
+    become_user="{{ $user }}"
   with_items: plugins
   tags: [jenkins]
 
@@ -30,7 +30,7 @@
     path='{{ jenkins_directory }}/jobs/{{ item }}'
     state=directory
     mode=0777
-    owner=$user
+    become_user="{{ $user }}"
   with_items: jobs
   tags: [jenkins]
 
@@ -39,34 +39,24 @@
     src=build.xml.j2
     dest='{{ jenkins_directory }}/jobs/{{ item }}/config.xml'
     mode=0777
-    owner=$user
+    become_user="{{ $user }}"
     backup=yes
   with_items: jobs
   tags: [jenkins]
 
-#- name: Deployment job directories are present
-#  file:
-#    path='{{ jenkins_directory }}/jobs/{{ item }}-deployment'
-#    state=directory
-#    mode=0777
-#    owner=$user
-#  with_items: jobs
-#  tags: [jenkins]
-#
-#- name: Deployment jobs are present
-#  template:
-#    src=deployment.xml.j2
-#    dest='{{ jenkins_directory }}/jobs/{{ item }}-deployment/config.xml'
-#    backup=yes
-#    mode=0777
-#    owner=$user
-#  with_items: jobs
-#  tags: [jenkins]
+- name: check if myvolume exists
+  command: docker volume inspect myjenvol
+  register: myvolume_exists
+  failed_when: false
+
+- name: create myvolume
+  command: docker volume create --name myjenvol
+  when: myvolume_exists|failed
 
 - name: Container is running
   docker:
     name=jenkins
     image=jenkins:1.642.4
     ports=8080:8080
-    volumes=/data/jenkins:/var/jenkins_home
+    volumes=myjenvol:/var/jenkins_home
   tags: [jenkins]
