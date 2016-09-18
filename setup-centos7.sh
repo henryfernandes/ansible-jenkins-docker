@@ -11,7 +11,7 @@ if [ $( grep 1000 /etc/group ) ];
 fi
 
 echo "Checking if User exists"
-if [ $( grep 1000 /etc/passwd ) ];
+if [ $( grep 1000 /etc/passwd | awk -F: '{print $1}' ) ];
   then
 	echo "user alredy exits with uid 1000"
         na1=`grep 1000 /etc/passwd | awk -F: '{print $1}'`
