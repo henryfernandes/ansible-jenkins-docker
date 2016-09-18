@@ -1,5 +1,5 @@
 - name: capture output of grep command
-  command: grep 1000 /etc/group | awk -F: '{print $1}'
+  command: "grep 1000 /etc/group | awk -F: '{print $1}'"
   register: grp
 
 - name: Directory is present
