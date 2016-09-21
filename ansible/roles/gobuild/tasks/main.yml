@@ -1,5 +1,4 @@
 - name: Build image and with buildargs
-   docker_image:
-     path: ./build
-     name: gobuild
-
+  docker_image:
+    path: ./build
+    name: gobuild
