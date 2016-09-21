@@ -1,24 +1,5 @@
 - name: Directories are present
   file:
-    path="/home/jenkins/.ssh/"
-    state=directory
-    owner=jenkins
-    group=jenkins
-    mode=0775
-  tags: [jenkins]
-
-
-- name: Config files are present
-  copy:
-    src='{{ item }}'
-    dest="/home/jenkins/.ssh/"
-    owner=jenkins
-    group=jenkins
-  with_items: ssh
-  tags: [jenkins]
-
-- name: Directories are present
-  file:
     path="{{ item }}"
     state=directory
     owner='{{ user }}'
@@ -31,7 +12,6 @@
   copy:
     src='{{ item }}'
     dest='{{ jenkins_directory }}/.{{ item }}'
-    mode=0777
     owner='{{ user }}'
     group='{{ grp }}'
   with_items: ssh
@@ -83,5 +63,5 @@
     name=jenkins
     image=jenkins:1.642.4
     ports=8080:8080
-    volumes=/data/jenkins:/var/jenkins_home:rw
+    volumes=/data/jenkins:/var/jenkins_home
   tags: [jenkins]

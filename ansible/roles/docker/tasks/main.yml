@@ -48,7 +48,7 @@
 - name: Debian docker-py is present
   pip:
     name: docker-py
-    version: 1.2.3
+    version: 1.7.0
     state: present
   tags: [docker]
 

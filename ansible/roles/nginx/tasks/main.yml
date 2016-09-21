@@ -1,5 +1,2 @@
 - name: Build image and with buildargs
-  docker_image:
-    path: ./nginx
-    name: gonginx
-
+  shell: cd /home/jenkins/ansible-jenkins-docker/ansible/roles/nginx/files/ && docker build -t gonginx .

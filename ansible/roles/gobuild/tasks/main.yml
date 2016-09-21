@@ -1,4 +1,2 @@
 - name: Build image and with buildargs
-  docker_image:
-    path: ./build
-    name: gobuild
+  shell: cd /home/jenkins/ansible-jenkins-docker/ansible/roles/gobuild/files/ && docker build -t gobuild .

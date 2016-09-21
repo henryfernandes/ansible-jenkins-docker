@@ -16,9 +16,8 @@ fi
 echo "Checking if User exists"
 if [ $( grep 1000 /etc/passwd | awk -F: '{print $1}' ) ];
   then
-	echo "user alredy exits with uid 1000"
         na1=`grep 1000 /etc/passwd | awk -F: '{print $1}'`
-  
+	echo "user $na1 alredy exits with uid 1000"
   else
         sudo useradd -m -d /home/jenkins -u 1000 -s /bin/bash jenkins
         echo jenkins | sudo passwd jenkins --stdin
@@ -27,9 +26,9 @@ if [ $( grep 1000 /etc/passwd | awk -F: '{print $1}' ) ];
 fi
 
 
-if [ $na1 == "jenkins" ];
+if [ $( grep jenkins /etc/passwd ) ];
  then
-        echo "User exists"
+        echo "Jenkins user exists"
  else
         echo "Creating Jenkins user"
  	groupadd jenkins
@@ -39,18 +38,16 @@ if [ $na1 == "jenkins" ];
 fi
 
 
-sudo usermod -aG $grp $na1
-
 #sudo mkdir /home/deployer/.ssh
-if sudo grep -q "$na1" /etc/sudoers
+if sudo grep -q "jenkins" /etc/sudoers
    then
-     echo " $na1 already added to sudoers"
+     echo " jenkins already added to sudoers"
 else
-      sudo sed -i '/NOPASSWD/ a $na1         ALL=(ALL)      NOPASSWD: ALL' /etc/sudoers
+      sudo sed -i '/NOPASSWD/ a jenkins         ALL=(ALL)      NOPASSWD: ALL' /etc/sudoers
      echo "not exist"
 fi
 
-sudo su - $na1  <<'EOF'
+sudo su - jenkins  <<'EOF'
 
 sudo yum update -y
 if [ $(sudo yum list epel-release | grep epel | awk '{print $2}') = "7-8" ];
@@ -68,23 +65,25 @@ echo "#Get godeploy git repo" #Get godeploy git repo
 git clone https://github.com/henryfernandes/ansible-jenkins-docker.git
 
 echo "Create SSH keys"#Create SSH keys
-mkdir -p files/.ssh; cd files/.ssh 
-if [ $( ls id_rsa ) ];
+mkdir -p .ssh 
+if [ $( ls .ssh/id_rsa ) ];
  then
    echo "Keys already created"
-   cat id_rsa.pub >> authorized_keys
+   cat .ssh/id_rsa.pub >> .ssh/authorized_keys
  else
-   ssh-keygen -t rsa -b 4096 -N "" -f ./id_rsa
-   cat id_rsa.pub >> authorized_keys 
+   ssh-keygen -t rsa -b 4096 -N "" -f .ssh/id_rsa
+   cat .ssh/id_rsa.pub >> .ssh/authorized_keys
 fi
 
-cp id_rsa.pub id_rsa authorized_keys $HOME/ansible-jenkins-docker/ansible/roles/jenkins/files/
+cd .ssh; cp id_rsa.pub id_rsa authorized_keys $HOME/ansible-jenkins-docker/ansible/roles/jenkins/files/
 
 cd $HOME/ansible-jenkins-docker/ansible/
 
 echo "#run playbook" #run playbook
+
+na1=`grep 1000 /etc/passwd | awk -F: '{print $1}'`
 grp=`grep 1000 /etc/group | awk -F: '{print $1}'`
-ansible-playbook -i hosts --extra-vars "user=$USER , grp=$grp" -c local cd.yml
+ansible-playbook -i hosts --extra-vars "user=$na1 , grp=$grp" -c local cd.yml
 
 
 EOF
