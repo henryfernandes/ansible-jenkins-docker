@@ -1,0 +1,5 @@
+- name: Build image and with buildargs
+   docker_image:
+     path: ./nginx
+     name: gonginx
+

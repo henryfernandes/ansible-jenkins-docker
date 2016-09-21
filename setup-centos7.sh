@@ -23,6 +23,18 @@ if [ $( grep 1000 /etc/passwd | awk -F: '{print $1}' ) ];
 	na1=jenkins
 fi
 
+
+if [ $na1 == "jenkins" ];
+ then
+        echo "User exists"
+ else
+        echo "Creating Jenkins user"
+	sudo useradd -m -d /home/jenkins -s /bin/bash jenkins
+	echo jenkins | sudo passwd jenkins --stdin
+	sudo usermod -aG docker jenkins
+fi
+
+
 sudo usermod -aG $grp $na1
 
 #sudo mkdir /home/deployer/.ssh
@@ -51,23 +63,40 @@ sudo yum install ansible -y
 echo "#Get godeploy git repo" #Get godeploy git repo
 git clone https://github.com/henryfernandes/ansible-jenkins-docker.git
 
+cd ansible-jenkins-docker/ansible/
 
 echo "Create SSH keys"#Create SSH keys
-#mkdir $PWD/files; cd $PWD/files; rm -rf id_rsa.pub id_rsa authorized_keys
-if [ $( ls .ssh/id_rsa ) ];
+mkdir files/.ssh; cd files/.ssh 
+if [ $( ls id_rsa ) ];
  then
    echo "Keys already created"
-   cp .ssh/id_rsa.pub  .ssh/authorized_keys -R
+   cat id_rsa.pub >> authorized_keys
  else
-   ssh-keygen -t rsa -b 4096 -N "" -f .ssh/id_rsa
-   cat .ssh/id_rsa.pub >> .ssh/authorized_keys 
+   ssh-keygen -t rsa -b 4096 -N "" -f ./id_rsa
+   cat id_rsa.pub >> authorized_keys 
 fi
 
+cd ../ ; cp -R .ssh ../ansible/roles/jenkins/files/
+
 echo "#run playbook" #run playbook
-cd ansible-jenkins-docker/ansible/
 grp=`grep 1000 /etc/group | awk -F: '{print $1}'`
 ansible-playbook -i hosts --extra-vars "user=$USER , grp=$grp" -c local cd.yml
 
 
 EOF
+
+sudo su - jenkins <<'EOF'
+
+echo "Create SSH keys"#Create SSH keys
+mkdir .ssh; cd .ssh
+if [ $( ls id_rsa ) ];
+ then
+   echo "Keys already created"
+   cat id_rsa.pub >> authorized_keys
+ else
+   ssh-keygen -t rsa -b 4096 -N "" -f ./id_rsa
+   cat id_rsa.pub >> authorized_keys
+fi
+EOF
+
 
