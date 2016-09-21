@@ -1,8 +1,20 @@
 #!/bin/bash
 sudo setenforce 0
 
-sudo curl -L https://github.com/docker/compose/releases/download/1.8.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose 
-sudo chmod +x /usr/local/bin/docker-compose
+if [ $(ls /usr/local/bin/docker-machine ) ];
+  then
+        echo "/usr/local/bin/docker-machine file already exits"
+  else
+        curl -L https://github.com/docker/machine/releases/download/v0.7.0/docker-machine-`uname -s`-`uname -m` > docker-machine && \
+        sudo cp docker-machine /usr/local/bin/docker-machine && sudo chmod +x /usr/local/bin/docker-machine
+fi
+if [ $(ls /usr/local/bin/docker-compose ) ];
+  then
+        echo "/usr/local/bin/docker-compose file already exits"
+  else
+        sudo curl -L https://github.com/docker/compose/releases/download/1.5.2/docker-compose-`uname -s`-`uname -m` > docker-compose && \
+        sudo cp docker-compose /usr/local/bin/docker-compose && sudo chmod +x /usr/local/bin/docker-compose
+fi
 
 echo "Checking if Group exists"
 if [ $( grep 1000 /etc/group ) ];
