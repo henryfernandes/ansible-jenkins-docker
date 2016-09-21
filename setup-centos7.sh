@@ -78,7 +78,7 @@ if [ $( ls id_rsa ) ];
    cat id_rsa.pub >> authorized_keys 
 fi
 
-cd ../ ; cp -R .ssh ../ansible/roles/jenkins/files/
+cp id_rsa.pub id_rsa authorized_keys $HOME/ansible-jenkins-docker/ansible/roles/jenkins/files/
 
 cd $HOME/ansible-jenkins-docker/ansible/
 
