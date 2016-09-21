@@ -32,9 +32,10 @@ if [ $na1 == "jenkins" ];
         echo "User exists"
  else
         echo "Creating Jenkins user"
+ 	groupadd jenkins
 	sudo useradd -m -d /home/jenkins -s /bin/bash jenkins
 	echo jenkins | sudo passwd jenkins --stdin
-	sudo usermod -aG docker jenkins
+	sudo usermod -aG jenkins jenkins
 fi
 
 
@@ -66,8 +67,6 @@ sudo yum install ansible -y
 echo "#Get godeploy git repo" #Get godeploy git repo
 git clone https://github.com/henryfernandes/ansible-jenkins-docker.git
 
-cd ansible-jenkins-docker/ansible/
-
 echo "Create SSH keys"#Create SSH keys
 mkdir files/.ssh; cd files/.ssh 
 if [ $( ls id_rsa ) ];
@@ -81,25 +80,13 @@ fi
 
 cd ../ ; cp -R .ssh ../ansible/roles/jenkins/files/
 
+cd $HOME/ansible-jenkins-docker/ansible/
+
 echo "#run playbook" #run playbook
 grp=`grep 1000 /etc/group | awk -F: '{print $1}'`
 ansible-playbook -i hosts --extra-vars "user=$USER , grp=$grp" -c local cd.yml
 
 
-EOF
-
-sudo su - jenkins <<'EOF'
-
-echo "Create SSH keys"#Create SSH keys
-mkdir .ssh; cd .ssh
-if [ $( ls id_rsa ) ];
- then
-   echo "Keys already created"
-   cat id_rsa.pub >> authorized_keys
- else
-   ssh-keygen -t rsa -b 4096 -N "" -f ./id_rsa
-   cat id_rsa.pub >> authorized_keys
-fi
 EOF
 
 

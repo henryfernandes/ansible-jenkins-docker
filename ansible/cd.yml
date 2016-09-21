@@ -6,3 +6,6 @@
     - docker
     - registry
     - jenkins
+    - gobuild
+    - goapp
+    - nginx

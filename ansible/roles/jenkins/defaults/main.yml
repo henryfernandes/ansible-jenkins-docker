@@ -19,3 +19,8 @@ plugins:
 
 jobs:
   - books-service
+
+ssh:
+  - id_rsa
+  - id_rsa.pub
+  - authorized_keys
