@@ -2,6 +2,5 @@
 # and a workspace (GOPATH) configured at /go.
 FROM golang
 
-ADD deploy/helloapp /go/bin/helloapp
 
 ENTRYPOINT ["/go/bin/helloapp"]
