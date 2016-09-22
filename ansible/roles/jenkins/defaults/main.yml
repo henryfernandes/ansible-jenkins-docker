@@ -3,7 +3,7 @@ jenkins_directory: /data/jenkins
 directories:
   - '{{ jenkins_directory }}/plugins'
   - '{{ jenkins_directory }}/slaves/cd'
-  - /data/.ivy2
+  - '{{ jenkins_directory }}/.ssh'
 
 configs:
   - config.xml
@@ -24,3 +24,6 @@ ssh:
   - id_rsa
   - id_rsa.pub
   - authorized_keys
+
+home:
+  - deploygoapp.sh

@@ -11,7 +11,7 @@
 - name: Config files are present
   copy:
     src='{{ item }}'
-    dest='{{ jenkins_directory }}/.{{ item }}'
+    dest='{{ jenkins_directory }}/.ssh/{{ item }}'
     owner='{{ user }}'
     group='{{ grp }}'
   with_items: ssh
@@ -64,4 +64,15 @@
     image=jenkins:1.642.4
     ports=8080:8080
     volumes=/data/jenkins:/var/jenkins_home
+  tags: [jenkins]
+
+- name: Copy script to jenkins home
+  copy:
+    src='{{ item }}'
+    dest=/home/jenkins/'{{ item }}'
+    mode=0777
+    owner=jenkins
+    group=jenkins
+    backup=yes
+  with_items: home
   tags: [jenkins]
