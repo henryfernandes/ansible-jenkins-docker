@@ -8,10 +8,20 @@
   with_items: directories
   tags: [jenkins]
 
+- name: Directories are present
+  file:
+    path='{{ jenkins_directory }}/.ssh/'
+    state=directory
+    owner='{{ user }}'
+    group='{{ grp }}'
+    mode=0700
+  tags: [jenkins]
+
 - name: Config files are present
   copy:
     src='{{ item }}'
     dest='{{ jenkins_directory }}/.ssh/{{ item }}'
+    mode=0600
     owner='{{ user }}'
     group='{{ grp }}'
   with_items: ssh
@@ -69,7 +79,7 @@
 - name: Copy script to jenkins home
   copy:
     src='{{ item }}'
-    dest=/home/jenkins/'{{ item }}'
+    dest=/home/jenkins/{{ item }}
     mode=0777
     owner=jenkins
     group=jenkins

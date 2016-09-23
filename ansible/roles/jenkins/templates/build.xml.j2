@@ -24,8 +24,7 @@
     <submoduleCfg class="list"/>
     <extensions/>
   </scm>
-  <assignedNode>cd</assignedNode>
-  <canRoam>false</canRoam>
+  <canRoam>true</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
@@ -38,26 +37,10 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>
-sudo docker build -t 127.0.0.1:5000/goapp-build build/.
-sudo docker push 127.0.0.1:5000/goapp-build
-sudo docker run -t --rm \
-  -v code/:/go/src/helloapp \
-  -v deploy/:/tmp/deploy \
-  127.0.0.1:5000/goapp-build
-sudo docker build -t 127.0.0.1:5000/goapp-deploy deploy/.
-sudo docker push 127.0.0.1:5000/goapp-deploy
-sudo docker run -itd -v deploy/helloapp:/go/bin/helloapp --name app1 127.0.0.1:5000/goapp-deploy
-sudo docker run -itd -v deploy/helloapp:/go/bin/helloapp --name app2 127.0.0.1:5000/goapp-deploy
-
-sudo fixnginx.sh
-
-sudo docker build -t 127.0.0.1:5000/nginx-build nginx/.
-sudo docker push 127.0.0.1:5000/nginx-build
-sudo docker run -itd --name gonginx -p 80:80 127.0.0.1:5000/nginx-build /bin/bash
-
+      <command>ssh -o StrictHostKeyChecking=no jenkins@{{ ansible_docker0.ipv4.address }} sh deploygoapp.sh
 </command>
     </hudson.tasks.Shell>
   </builders>
+  <publishers/>
   <buildWrappers/>
 </project>
