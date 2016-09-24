@@ -77,13 +77,12 @@ echo "#Get godeploy git repo" #Get godeploy git repo
 git clone https://github.com/henryfernandes/ansible-jenkins-docker.git
 
 echo "Create SSH keys"#Create SSH keys
-mkdir -p .ssh 
 if [ $( ls .ssh/id_rsa ) ];
  then
    echo "Keys already created"
    cat .ssh/id_rsa.pub >> .ssh/authorized_keys
  else
-   ssh-keygen -t rsa -b 4096 -N "" -f .ssh/id_rsa
+   ssh-keygen -t rsa -b 4096 -N "" 
    cat .ssh/id_rsa.pub >> .ssh/authorized_keys
 fi
 
