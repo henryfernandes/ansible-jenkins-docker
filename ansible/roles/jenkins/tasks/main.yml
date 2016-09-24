@@ -57,6 +57,10 @@
   with_items: jobs
   tags: [jenkins]
 
+- name: get ip address for docker0
+  command: ip addr show docker0 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1
+  register: dockerip
+
 - name: Build jobs are present
   template:
     src=build.xml.j2

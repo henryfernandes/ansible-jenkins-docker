@@ -37,7 +37,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>ssh -o StrictHostKeyChecking=no jenkins@{{ ansible_docker0.ipv4.address }} sh deploygoapp.sh
+      <command>ssh -o StrictHostKeyChecking=no jenkins@{{ dockerip }} sh deploygoapp.sh
 </command>
     </hudson.tasks.Shell>
   </builders>
