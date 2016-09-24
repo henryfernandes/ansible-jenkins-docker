@@ -4,7 +4,7 @@
     state=directory
     owner='{{ user }}'
     group='{{ grp }}'
-    mode=0777
+    mode=0755
   with_items: directories
   tags: [jenkins]
 
@@ -31,7 +31,7 @@
   copy:
     src='{{ item }}'
     dest='{{ jenkins_directory }}/{{ item }}'
-    mode=0777
+    mode=0755
     owner='{{ user }}'
     group='{{ grp }}'
   with_items: configs
@@ -41,7 +41,7 @@
   copy:
     src='{{ item }}'
     dest='{{ jenkins_directory }}/plugins/{{ item }}'
-    mode=0777
+    mode=0755
     owner='{{ user }}'
     group='{{ grp }}'
   with_items: plugins
@@ -51,7 +51,7 @@
   file:
     path='{{ jenkins_directory }}/jobs/{{ item }}'
     state=directory
-    mode=0777
+    mode=0755
     owner='{{ user }}'
     group='{{ grp }}'
   with_items: jobs
@@ -61,7 +61,7 @@
   template:
     src=build.xml.j2
     dest='{{ jenkins_directory }}/jobs/{{ item }}/config.xml'
-    mode=0777
+    mode=0755
     owner='{{ user }}'
     group='{{ grp }}'
     backup=yes
@@ -80,7 +80,7 @@
   copy:
     src='{{ item }}'
     dest=/home/jenkins/{{ item }}
-    mode=0777
+    mode=0755
     owner=jenkins
     group=jenkins
     backup=yes
