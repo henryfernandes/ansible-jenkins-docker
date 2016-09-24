@@ -72,7 +72,7 @@ if [ $(sudo yum list epel-release | grep epel | awk '{print $2}') = "7-8" ];
 fi
 
 sudo yum install ansible -y
-
+rm -rf ansible-jenkins-docker
 echo "#Get godeploy git repo" #Get godeploy git repo
 git clone https://github.com/henryfernandes/ansible-jenkins-docker.git
 
