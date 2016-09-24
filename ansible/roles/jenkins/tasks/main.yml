@@ -10,14 +10,14 @@
 
 - name: Directories are present
   file:
-    path='{{ jenkins_directory }}/.ssh/'
+    path='{{ jenkins_directory }}/.ssh'
     state=directory
     owner='{{ user }}'
     group='{{ grp }}'
     mode=0700
   tags: [jenkins]
 
-- name: Config files are present
+- name: Keys files are present
   copy:
     src='{{ item }}'
     dest='{{ jenkins_directory }}/.ssh/{{ item }}'

@@ -3,7 +3,6 @@ jenkins_directory: /data/jenkins
 directories:
   - '{{ jenkins_directory }}/plugins'
   - '{{ jenkins_directory }}/slaves/cd'
-  - '{{ jenkins_directory }}/.ssh'
 
 configs:
   - config.xml
