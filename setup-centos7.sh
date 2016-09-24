@@ -95,7 +95,8 @@ echo "#run playbook" #run playbook
 
 na1=`grep 1000 /etc/passwd | awk -F: '{print $1}'`
 grp=`grep 1000 /etc/group | awk -F: '{print $1}'`
-ansible-playbook -i hosts --extra-vars "user=$na1 , grp=$grp" -c local cd.yml
+dockerip=`ip addr show docker0 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1`
+ansible-playbook -i hosts --extra-vars "user=$na1 , grp=$grp , dockerip=$dockerip" -c local cd.yml
 
 
 EOF

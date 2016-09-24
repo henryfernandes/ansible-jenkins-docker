@@ -1,2 +1,1 @@
 copyright_msg: Copyright2016
-dockerip: {{ ansible_docker0.ipv4.address }}
